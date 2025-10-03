@@ -20,9 +20,10 @@ jobs:
 
       - name: Add PLC to known_hosts
         run: |
-          mkdir -p $HOME/.ssh
-          ssh-keyscan -T 10 -t rsa ${{ secrets.PLC_HOST }} >> $HOME/.ssh/known_hosts
-          chmod 644 $HOME/.ssh/known_hosts
+          echo "Creating .ssh directory"
+          mkdir -p /home/runner/.ssh
+          ssh-keyscan -T 10 -t rsa ${{ secrets.PLC_HOST }} >> /home/runner/.ssh/known_hosts
+          chmod 644 /home/runner/.ssh/known_hosts
 
       # 4️⃣ SSH на ПЛК и запуск скрипта
       - name: SSH into PLC and run script
