@@ -7,13 +7,12 @@ on:
 
 jobs:
   run-python-and-ssh:
-    runs-on: ubuntu-latest
-
+    runs-on: self-hosted
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Install SSH + sshpass
+      - name: Install SSH client
         run: sudo apt-get update && sudo apt-get install -y openssh-client sshpass
 
       - name: Run local Python
@@ -24,4 +23,4 @@ jobs:
           PLC_IP: ${{ secrets.PLC_HOST }}
           SSHPASS: ${{ secrets.PLC_PASSWORD }}
         run: |
-          bash run_test.sh $PLC_IP
+          bash scripts/run_test.sh $PLC_IP
