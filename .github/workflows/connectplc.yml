@@ -24,4 +24,4 @@ jobs:
           PLC_IP: ${{ secrets.PLC_HOST }}
           SSHPASS: ${{ secrets.PLC_PASSWORD }}
         run: |
-          bash scripts/run_test.sh $PLC_IP
+          bash run_test.sh $PLC_IP
