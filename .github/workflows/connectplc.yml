@@ -18,9 +18,13 @@ jobs:
       - name: Run local Python script
         run: python main.py
 
-      - name: Add PLC to known_hosts
+      - name: Remove old SSH key for PLC
         run: |
           mkdir -p ~/.ssh
+          ssh-keygen -f ~/.ssh/known_hosts -R ${{ secrets.PLC_HOST }} || true
+
+      - name: Add PLC to known_hosts
+        run: |
           ssh-keyscan -T 10 -t rsa ${{ secrets.PLC_HOST }} >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
