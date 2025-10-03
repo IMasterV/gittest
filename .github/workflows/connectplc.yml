@@ -15,9 +15,6 @@ jobs:
       - name: Install SSH client
         run: sudo apt-get update && sudo apt-get install -y openssh-client sshpass
 
-#      - name: Run local Python
-#        run: python main.py
-
       - name: Run test on PLC
         env:
           PLC_IP: ${{ secrets.PLC_HOST }}
