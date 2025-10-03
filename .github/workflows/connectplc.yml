@@ -8,31 +8,20 @@ on:
 jobs:
   run-python-and-ssh:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Install SSH client
-        run: sudo apt-get update && sudo apt-get install -y openssh-client
+      - name: Install SSH + sshpass
+        run: sudo apt-get update && sudo apt-get install -y openssh-client sshpass
 
-      - name: Run local Python script
+      - name: Run local Python
         run: python main.py
 
-      - name: Remove old SSH key for PLC
+      - name: Run test on PLC
+        env:
+          PLC_IP: ${{ secrets.PLC_HOST }}
+          SSHPASS: ${{ secrets.PLC_PASSWORD }}
         run: |
-          mkdir -p ~/.ssh
-          ssh-keygen -f ~/.ssh/known_hosts -R ${{ secrets.PLC_HOST }} || true
-
-      - name: Add PLC to known_hosts
-        run: |
-          ssh-keyscan -T 10 -t rsa ${{ secrets.PLC_HOST }} >> ~/.ssh/known_hosts
-          chmod 644 ~/.ssh/known_hosts
-
-      - name: SSH into PLC and run script
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.PLC_HOST }}
-          username: ${{ secrets.PLC_USER }}
-          password: ${{ secrets.PLC_PASSWORD }}
-          script: |
-            python3 /home/root/scripts/somth.py
+          bash scripts/run_test.sh $PLC_IP
