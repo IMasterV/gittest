@@ -1,0 +1,22 @@
+name: Run Python Script
+
+on:
+  push:          # запускать при каждом пуше
+    branches:
+      - main     # только на ветке main (или убери, чтобы на всех)
+
+jobs:
+  run-python:
+    runs-on: ubuntu-latest   # GitHub запустит контейнер Ubuntu
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3  # скачиваем твой репозиторий в раннер
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'    # версия Python
+
+      - name: Run script
+        run: python main.py        # запуск твоего скрипта
