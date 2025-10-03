@@ -10,12 +10,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Скачиваем репозиторий
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # 2️⃣ Локальный Python скрипт
       - name: Run local Python script
         run: python main.py
 
+      # 3️⃣ Добавляем RSA ключ ПЛК в known_hosts
+      - name: Add PLC to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -T 10 -t rsa ${{ secrets.PLC_HOST }} >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      # 4️⃣ SSH на ПЛК и запуск скрипта
       - name: SSH into PLC and run script
         uses: appleboy/ssh-action@v1.0.3
         with:
